@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: SpringMetricsDemo
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+  metrics:
+    tags:
+      application: prometheus
+
+

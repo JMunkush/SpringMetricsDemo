@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+
+  victoria-metrics:
+    container_name: victoria-metrics
+    image: victoriametrics/victoria-metrics:v1.103.0
+    command: -promscrape.config=/etc/prometheus/prometheus.yaml
+    ports:
+      - "8428:8428"
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+
+    networks:
+      - prometheus
+
+
+  grafana:
+    image: grafana/grafana-enterprise:11.2.0
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+
+    networks:
+      - prometheus
+
+
+  main-service:
+    container_name: "MyService"
+    build:
+      context: ./
+    ports:
+      - "8080:8080"
+    networks:
+      - prometheus
+
+
+networks:
+  prometheus:
+    driver: bridge
